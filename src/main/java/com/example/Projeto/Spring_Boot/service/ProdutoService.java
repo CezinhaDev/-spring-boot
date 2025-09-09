@@ -1,16 +1,16 @@
 package com.example.Projeto.Spring_Boot.service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.stereotype.Service;
 
+import com.example.Projeto.Spring_Boot.exceptions.RecursoNaoEncontradoException;
 import com.example.Projeto.Spring_Boot.model.Produto;
 import com.example.Projeto.Spring_Boot.repository.ProdutoRepository;
 
 @Service
 public class ProdutoService {
-    
 
     private final ProdutoRepository produtoRepository;
 
@@ -22,15 +22,21 @@ public class ProdutoService {
         return produtoRepository.findAll();
     }
 
-    public Optional <Produto> buscarPorId(Long id){
-        return produtoRepository.findById(id); // findById é um método fornecido pelo JpaRepository para buscar uma entidade pelo seu ID
+    public Produto buscarPorId(Long id) {
+        return produtoRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Produto com ID "+id+" não encontrado."));
     }
 
     public Produto salvarProduto(Produto produto) {
-        return produtoRepository.save(produto); // save é um método fornecido pelo JpaRepository para salvar ou atualizar uma entidade
+        return produtoRepository.save(produto);
     }
 
     public void deletarProduto(Long id) {
-        produtoRepository.deleteById(id); // deleteById é um método fornecido pelo JpaRepository para deletar uma entidade pelo seu ID
+
+        if (!produtoRepository.existsById(id)) {
+            throw new RecursoNaoEncontradoException("Produto com ID "+id +" não encontrado.");
+        }
+        produtoRepository.deleteById(id);
     }
+    
 }
