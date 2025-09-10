@@ -1,5 +1,4 @@
-
-package com.example.meu_primeiro_springboot.service;
+package com.example.Projeto.Spring_Boot.service;
 
 import java.util.Optional;
 
@@ -18,8 +17,6 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-    
-
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
@@ -27,7 +24,7 @@ public class UsuarioService {
 
     public Usuario registrarUsuario(String username, String password) {
         String senhaCriptografada = passwordEncoder.encode(password);
-        Usuario usuario = new Usuario(username, senhaCriptografada);
+        Usuario usuario = new Usuario();
         return usuarioRepository.save(usuario);
     }
 
